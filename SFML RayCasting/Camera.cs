@@ -51,14 +51,14 @@ public class Camera
     }
     Vector2f directionMove = new Vector2f();
 
-    public void OnKeyPressed(object sender, KeyEventArgs e, MenedgerRays collision)
+    public void OnKeyPressed(object sender, KeyEventArgs e)
     {
 
         if (Keyboard.IsKeyPressed(Keyboard.Key.K))
         {
             if (!isJumping)
-                zIndex += 0.05f;
-            groundLevel += 0.05f;
+                zIndex += 5f;
+            //groundLevel += 0.05f;
         }
         if (e.Code == Keyboard.Key.L)
         {

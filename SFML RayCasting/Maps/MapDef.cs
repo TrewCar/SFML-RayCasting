@@ -42,8 +42,7 @@ namespace SFML_RayCasting.Maps
 
         public void OnKeyPressed(object sender, KeyEventArgs e)
         {
-            var collision = new MenedgerRays(this);
-            camera.OnKeyPressed(sender, e, collision);
+            camera.OnKeyPressed(sender, e);
         }
         public virtual void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
