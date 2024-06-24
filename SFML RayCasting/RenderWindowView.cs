@@ -21,13 +21,13 @@ namespace SFML_RayCasting
                     {
                         Collision colis = rays[i].Colisions[j];
 
-                        DrawCollision(colis, i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth);
+                        DrawCollision(colis, i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex);
                     }
-                    DrawCollision(rays[i].Colisions.First(), i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth);
+                    DrawCollision(rays[i].Colisions.First(), i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex);
                 }
             }
         }
-        private static void DrawCollision(Collision colis, int i, float rAngle, float middleHeight, float stepWidth)
+        private static void DrawCollision(Collision colis, int i, float rAngle, float middleHeight, float stepWidth, float zIndexPos)
         {
             AbsObject obj = colis.obj;
             float dist = colis.Dist;
@@ -37,16 +37,26 @@ namespace SFML_RayCasting
             float angleDifference = MathUtils.DegreesToRadians(rAngle);
             float correctedDist = dist * (float)Math.Cos(angleDifference);
 
+            float zIndex = (obj.zIndex - zIndexPos);
+
+            if (obj.zIndex == 0)
+            {
+                obj.zIndex = 0.000001f;
+            }
+
             // Перспективное сокращение высоты стены
-
             float defWallHeight =  WindowMenedger.Height / correctedDist * 50;
-
             float wallHeight = WindowMenedger.Height / correctedDist * 50 * obj.SizeWall;
 
-            float middle = wallHeight - defWallHeight;
+            float temp = wallHeight;
+            wallHeight *= zIndex;
 
-            float upHeight = middleHeight - wallHeight / 2.0f - middle/2;
-            float downHeight = middleHeight + wallHeight / 2.0f + middle / 2;
+            temp = wallHeight - temp;
+
+            float middle = wallHeight - defWallHeight;
+            wallHeight -= temp;
+            float upHeight = (middleHeight - wallHeight / 2.0f - middle/2);
+            float downHeight = (middleHeight + wallHeight / 2.0f + middle / 2);
 
             if (sp != null)
             {

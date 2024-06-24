@@ -70,7 +70,7 @@ namespace SFML_RayCasting.Menedgers
                 {
                     foreach (var obj in objs)
                     {
-                        List<Collision> col = obj.CheckColision(ray);
+                        List<Collision> col = obj.CheckColision(ray, map.camera.zIndex);
                         ray.Colisions.AddRange(col);
                     }
 

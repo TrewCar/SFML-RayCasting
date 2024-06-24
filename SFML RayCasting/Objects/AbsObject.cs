@@ -11,22 +11,24 @@ namespace SFML_RayCasting.Objects
 {
     public abstract class AbsObject
     {
-        public AbsObject(string Name, Vector2f pos, SFML.Graphics.Color color, float SizeWall = 1, bool IsGlass = false)
+        public AbsObject(string Name, Vector2f pos, SFML.Graphics.Color color, float SizeWall = 1, bool IsGlass = false, float zIndex = 1)
         {
             this.Name = Name;
             this.Position = pos;
             this.IsGlass = IsGlass;
             this.Color = color;
 
+            this.zIndex = zIndex;
+
             this.SizeWall = SizeWall;
         }
-        public AbsObject(string Name, Vector2f pos, string pathToTexture, float SizeWall = 1, bool IsGlass = false)
+        public AbsObject(string Name, Vector2f pos, string pathToTexture, float SizeWall = 1, bool IsGlass = false, float zIndex = 1)
         {
             this.Name = Name;
             this.Position = pos;
             this.IsGlass = IsGlass;
             this.texture = new Texture(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToTexture));
-
+            this.zIndex = zIndex;
             var sz = texture.Size;
 
             distPyWidhtTexture = 50 * SizeWall * ((float)sz.X * (float)sz.Y) / ((float)sz.Y * (float)sz.Y);
@@ -37,10 +39,12 @@ namespace SFML_RayCasting.Objects
         public float distPyWidhtTexture = 75.0f;
         public float SizeWall = 1;
 
+        public float zIndex = 0;
+
         public bool IsGlass = false;
         public string Name { get; }
         public Vector2f Position { get; set; }
-        public abstract List<Collision> CheckColision(Ray ray);
+        public abstract List<Collision> CheckColision(Ray ray, float zIndex);
         public abstract void Draw();
         protected string pathToTexture;
         protected SFML.Graphics.Texture texture;

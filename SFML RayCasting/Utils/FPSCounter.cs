@@ -13,6 +13,7 @@ namespace SFML_RayCasting.Utils
         private int frameCount = 0;
         private double elapsedTime = 0;
 
+        public float deltaTime { get; private set; } = 0;
         public FPSCounter()
         {
             stopwatch.Start();
@@ -22,7 +23,7 @@ namespace SFML_RayCasting.Utils
         {
             frameCount++;
             elapsedTime += stopwatch.ElapsedMilliseconds;
-            
+            deltaTime = (float)stopwatch.ElapsedMilliseconds / 1000f;
             double fps = frameCount / (elapsedTime / 1000);
             Console.WriteLine($"FPS: {fps:F1}");
             frameCount = 0;

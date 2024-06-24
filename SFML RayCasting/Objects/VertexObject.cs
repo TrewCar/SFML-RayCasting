@@ -12,11 +12,11 @@ namespace SFML_RayCasting.Objects
 {
     public class VertexObject : AbsObject
     {
-        public VertexObject(string Name, Vector2f pos, string pathTexture, float SizeWall = 1, bool IsGlass = false) :base(Name, pos, pathTexture, SizeWall, IsGlass) 
+        public VertexObject(string Name, Vector2f pos, string pathTexture, float SizeWall = 1, bool IsGlass = false, float zIndex = 1) :base(Name, pos, pathTexture, SizeWall, IsGlass, zIndex) 
         {
             Connections = new List<(Vector2f, Vector2f)> ();
         }
-        public VertexObject(string Name, Vector2f pos, Color color, float SizeWall = 1, bool IsGlass = false) : base(Name, pos, color, SizeWall, IsGlass)
+        public VertexObject(string Name, Vector2f pos, Color color, float SizeWall = 1, bool IsGlass = false, float zIndex = 1) : base(Name, pos, color, SizeWall, IsGlass, zIndex)
         {
             Connections = new List<(Vector2f, Vector2f)>();
         }
@@ -24,9 +24,13 @@ namespace SFML_RayCasting.Objects
         public List<(Vector2f, Vector2f)> Connections { get; set; }
         public Dictionary<Vector2f, float> textureIndex = new Dictionary<Vector2f, float>();
 
-        public override List<Collision> CheckColision(Ray ray)
+        public override List<Collision> CheckColision(Ray ray, float zIndex)
         {
             List<Collision> collisions = new List<Collision>();
+            if (MathF.Abs(zIndex - this.zIndex) > 5)
+                return collisions;
+
+
 
             float minDist = float.MaxValue;
             // Пройти по всем соединениям и проверить их направление

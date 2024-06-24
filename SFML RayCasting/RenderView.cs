@@ -20,7 +20,7 @@ public class RenderView
     private delegate void PreviewCalcRay();
     private PreviewCalcRay OnPreviewCalcRay;
 
-    private delegate void TickFrame(List<Ray> view);
+    private delegate void TickFrame(List<Ray> view, float deltaTime);
     private TickFrame Tick;
 
     public RenderView(MapDef map)
@@ -52,7 +52,7 @@ public class RenderView
             this.raysView.CalcRay();
 
 
-            Tick.Invoke(raysView.rays);
+            Tick.Invoke(raysView.rays, fpsCounter.deltaTime);
 
             DrawMap();
 

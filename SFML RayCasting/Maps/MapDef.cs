@@ -40,71 +40,23 @@ namespace SFML_RayCasting.Maps
             }
         }
 
-        public virtual Vector2f InputKey(object sender, KeyEventArgs e)
-        {
-            Vector2f directionMove = new Vector2f(0, 0);
-
-            if (e.Code == Keyboard.Key.W)
-                directionMove += camera.GetDirection() * 10;
-            if (e.Code == Keyboard.Key.S)
-                directionMove += camera.GetDirection() * -10;
-            if (e.Code == Keyboard.Key.A)
-                directionMove += camera.GetPerpendicularDirection() * -10;
-            if (e.Code == Keyboard.Key.D)
-                directionMove += camera.GetPerpendicularDirection() * 10;
-
-
-
-            if (e.Code == Keyboard.Key.K)
-                camera.Rotate(-5);
-            if (e.Code == Keyboard.Key.L)
-                camera.Rotate(5);
-
-            return directionMove;
-        }
-
         public void OnKeyPressed(object sender, KeyEventArgs e)
         {
-
-            Vector2f camPos = camera.Position;
-
-            Vector2f directionMove = InputKey(sender, e);
-
-            if (directionMove != new Vector2f(0, 0))
-            {
-                Vector2f newPos = camPos + directionMove;
-                var collision = new MenedgerRays(this);
-                collision.CalcRay();
-                collision.SaveOnlyCollision();
-                List<Ray> rays = collision.rays;
-
-                Vector2f adjustedMove = MathUtils.AdjustMovementForCollision(newPos, rays, directionMove);
-
-                camera.Move(adjustedMove);
-            }
+            var collision = new MenedgerRays(this);
+            camera.OnKeyPressed(sender, e, collision);
         }
         public virtual void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
-            // Определяем разницу в позиции мыши по горизонтали
-            float mouseDeltaX = e.X - previousMouseX;
-
-            // Изменяем угол поворота камеры в зависимости от движения мыши
-            if (mouseDeltaX != 0)
-            {
-                float rotationSpeed = velosityMouse; // Скорость вращения камеры с помощью мыши
-                camera.Rotate(mouseDeltaX * rotationSpeed);
-            }
-
-            // Обновляем предыдущую позицию мыши
-            previousMouseX = e.X;
+            camera.OnMouseMoved(sender, e);
         }
 
         public virtual void OnPreviewCalcRay()
         {
             return;
         }
-        public virtual void Tick(List<Ray> view)
+        public virtual void Tick(List<Ray> view, float deltaTime)
         {
+            camera.Tick(deltaTime, new MenedgerRays(this));
             return;
         }
     }

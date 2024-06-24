@@ -119,7 +119,7 @@ public static class MathUtils
 
         return new Vector2f(newX, newY);
     }
-    public static Vector2f AdjustMovementForCollision(Vector2f newPos, List<Ray> rays, Vector2f originalMove)
+    public static Vector2f AdjustMovementForCollision(Vector2f newPos, float zIndex, List<Ray> rays, Vector2f originalMove)
     {
         Vector2f adjustedMove = originalMove;
 
@@ -127,6 +127,9 @@ public static class MathUtils
         {
             foreach (Collision col in ray.Colisions)
             {
+                float midleZIndex = MathF.Abs(col.obj.zIndex - (zIndex+1));
+                if (midleZIndex >= 1.8f)
+                    continue;
                 if (MathUtils.Distance(newPos, col.Pos) < 10) // Определить столкновение
                 {
                     Vector2f normal = col.NornalCollison.Item1 - col.NornalCollison.Item2;
