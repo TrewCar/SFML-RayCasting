@@ -7,7 +7,7 @@ class Program
     {
         int width = 1620;
         int height = 1024;
-        float step = 1;
+        float step = 20;
         float rayLength = 2000;
 
         Camera camera = new Camera(new Vector2f(300, 300), 0.0f);

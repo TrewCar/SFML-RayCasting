@@ -19,7 +19,7 @@ namespace SFML_RayCasting.Maps
         public float step;
         public float rayLength;
         public Camera camera;
-        public float Pov = 90.0f;
+        public float Pov = 80.0f;
         public bool OnCollison = true;
 
         protected float previousMouseX;
@@ -55,7 +55,7 @@ namespace SFML_RayCasting.Maps
         }
         public virtual void Tick(List<Ray> view, float deltaTime)
         {
-            camera.Tick(deltaTime, new MenedgerRays(this));
+            camera.Tick(deltaTime, this);
             return;
         }
     }

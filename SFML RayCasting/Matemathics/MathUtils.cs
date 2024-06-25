@@ -130,7 +130,7 @@ public static class MathUtils
                 float midleZIndex = MathF.Abs(col.obj.zIndex - (zIndex+1));
                 if (midleZIndex >= 1.8f)
                     continue;
-                if (MathUtils.Distance(newPos, col.Pos) < 10) // Определить столкновение
+                if (MathUtils.Distance(newPos, col.Pos) < 5) // Определить столкновение
                 {
                     Vector2f normal = col.NornalCollison.Item1 - col.NornalCollison.Item2;
                     normal = MathUtils.Normalized(new Vector2f(-normal.Y, normal.X));

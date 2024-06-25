@@ -103,5 +103,6 @@ namespace SFML_RayCasting.Objects
             // Добавляем круг в коллекцию объектов
             return circle;
         }
+
     }
 }

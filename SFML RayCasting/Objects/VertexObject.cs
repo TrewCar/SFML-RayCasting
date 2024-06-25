@@ -149,7 +149,25 @@ namespace SFML_RayCasting.Objects
             return sprite;
         }
 
+		public bool IsPointInside(Vector2f point)
+		{
+			int crossings = 0;
+			foreach (var connection in Connections)
+			{
+				Vector2f p1 = connection.Item1;
+				Vector2f p2 = connection.Item2;
 
+				// Проверяем пересечение горизонтального луча вправо от точки с ребром многоугольника
+				if (((p1.Y <= point.Y && point.Y < p2.Y) || (p2.Y <= point.Y && point.Y < p1.Y)) &&
+					(point.X < (p2.X - p1.X) * (point.Y - p1.Y) / (p2.Y - p1.Y) + p1.X))
+				{
+					crossings++;
+				}
+			}
 
-    }
+			// Если количество пересечений нечетное, точка внутри многоугольника
+			return (crossings % 2 == 1);
+		}
+
+	}
 }

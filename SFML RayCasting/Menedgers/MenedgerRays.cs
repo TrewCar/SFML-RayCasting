@@ -27,7 +27,7 @@ namespace SFML_RayCasting.Menedgers
             this.map = map;
             this.Colisson = true;
             this.width = map.width;
-            this.step = 50;
+            this.step = 2;
             this.POV = 360.0f;
             this.maxRecurse = 0;
             this.isNeedRecurce = false;

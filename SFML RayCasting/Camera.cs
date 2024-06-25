@@ -1,5 +1,6 @@
 ﻿using SFML.System;
 using SFML.Window;
+using SFML_RayCasting.Maps;
 using SFML_RayCasting.Menedgers;
 
 public class Camera
@@ -11,6 +12,8 @@ public class Camera
     protected float previousMouseY;
     protected float velosityMouse = 0.5f;
     protected float velosityMouseY = 0.1f;
+
+    protected float speedVelosity = 300;
 
     public float zIndex = 0; // позиция по оси прыжка
 
@@ -50,8 +53,9 @@ public class Camera
         return new Vector2f((float)System.Math.Cos(angleRad), (float)System.Math.Sin(angleRad));
     }
     Vector2f directionMove = new Vector2f();
+	private float upLevel;
 
-    public void OnKeyPressed(object sender, KeyEventArgs e)
+	public void OnKeyPressed(object sender, KeyEventArgs e)
     {
 
         if (Keyboard.IsKeyPressed(Keyboard.Key.K))
@@ -82,23 +86,25 @@ public class Camera
         // Обновляем предыдущую позицию мыши
         previousMouseX = e.X;
     }
-    public void Tick(float deltaTime, MenedgerRays collision)
+    public void Tick(float deltaTime, MapDef map)
     {
         Vector2f directionMove = new Vector2f();
         if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-            directionMove += this.GetDirection() * 500 * deltaTime;
+            directionMove += this.GetDirection() * speedVelosity * deltaTime;
         if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-            directionMove += this.GetDirection() * -500 * deltaTime;
+            directionMove += this.GetDirection() * -speedVelosity * deltaTime;
         if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-            directionMove += this.GetPerpendicularDirection() * -500 * deltaTime;
+            directionMove += this.GetPerpendicularDirection() * -speedVelosity * deltaTime;
         if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-            directionMove += this.GetPerpendicularDirection() * 500 * deltaTime;
+            directionMove += this.GetPerpendicularDirection() * speedVelosity * deltaTime;
 
         Vector2f camPos = this.Position;
 
         if (directionMove != new Vector2f(0, 0))
         {
             Vector2f newPos = camPos + directionMove;
+            MenedgerRays collision = new MenedgerRays(map);
+
             collision.CalcRay();
             collision.SaveOnlyCollision();
             List<Ray> rays = collision.rays;
@@ -116,15 +122,25 @@ public class Camera
             jumpVelocity = jumpStrength;
         }
 
-        if(groundLevel < zIndex && !isJumping)
+        if(groundLevel < zIndex && !isJumping || zIndex > upLevel)
         {
             isJumping = true;
             jumpVelocity = -1;
         }
+		var res = CollisionUpDownMen.CalczIndex(camPos, zIndex, map);
+		if (res.down > 0)
+			groundLevel = res.down + 1;
+		else
+			groundLevel = 0;
 
-        // Обновление позиции и скорости прыжка
-        if (isJumping)
+        if (res.up > 0)
+            upLevel = res.up-2;
+        else
+            upLevel = float.MaxValue;
+		// Обновление позиции и скорости прыжка
+		if (isJumping)
         {
+
             zIndex += jumpVelocity * deltaTime;
             jumpVelocity += gravity * deltaTime;
 
