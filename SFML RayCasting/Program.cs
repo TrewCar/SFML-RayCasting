@@ -3,14 +3,15 @@ using SFML_RayCasting.Maps;
 
 class Program
 {
+    public static float maxDistRay = 2000;
     static void Main()
     {
         int width = 1620;
         int height = 1024;
-        float step = 20;
-        float rayLength = 2000;
+        float step = 3;
+        float rayLength = maxDistRay;
 
-        Camera camera = new Camera(new Vector2f(300, 300), 0.0f);
+        Camera camera = new Camera(new Vector2f(350, 350), 0.0f);
         MapDef map = new MapTest();
 
         map.width = width;

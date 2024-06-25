@@ -60,7 +60,7 @@ public class Camera
 
         if (Keyboard.IsKeyPressed(Keyboard.Key.K))
         {
-            if (!isJumping)
+            //if (!isJumping)
                 zIndex += 5f;
             //groundLevel += 0.05f;
         }

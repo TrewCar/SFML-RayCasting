@@ -11,7 +11,7 @@ public class RenderView
 {
     private MapDef map = new MapTest();
 
-    private int maxRecurs = 10;
+    private int maxRecurs = 15;
 
     private PrimitiveType primitiveMap = PrimitiveType.LineStrip;
 

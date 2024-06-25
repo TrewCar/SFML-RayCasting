@@ -118,7 +118,6 @@ namespace SFML_RayCasting.Objects
 
         public override Sprite GetSegment(Collision collision, float segmentWidth)
         {
-            if (texture == null) return null;
 
             Vector2f point = collision.Pos;
             (Vector2f, Vector2f) normal = collision.NornalCollison;
@@ -132,7 +131,26 @@ namespace SFML_RayCasting.Objects
             while (index >= 1)
                 index -= 1;
 
-            Sprite sprite = new Sprite(texture);
+            Sprite sprite;
+
+            if (texture == null)
+            {
+				texture = new Texture(300, 300);
+                sprite = new Sprite(texture);
+				var sz = texture.Size;
+				distPyWidhtTexture = 50 * SizeWall * ((float)sz.X * (float)sz.Y) / ((float)sz.Y * (float)sz.Y);
+				sprite.Color = this.Color;
+
+
+                texture = null;
+			}
+            else
+            {
+				sprite = new Sprite(texture);
+
+			}
+
+          
 
             float xOnTexture = (float)texture.Size.X * index;
 

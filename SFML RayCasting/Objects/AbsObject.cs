@@ -21,7 +21,26 @@ namespace SFML_RayCasting.Objects
             this.zIndex = zIndex;
 
             this.SizeWall = SizeWall;
-        }
+
+
+			// Создание изображения нужного размера
+			Image image = new Image(400, 400);
+
+			// Заполнение изображения указанным цветом
+			for (uint x = 0; x < 400; x++)
+			{
+				for (uint y = 0; y < 400; y++)
+				{
+					image.SetPixel(x, y, color);
+				}
+			}
+
+			// Создание текстуры из изображения
+			texture = new Texture(image);
+
+			var sz = texture.Size;
+			distPyWidhtTexture = 50 * SizeWall * ((float)sz.X * (float)sz.Y) / ((float)sz.Y * (float)sz.Y);
+		}
         public AbsObject(string Name, Vector2f pos, string pathToTexture, float SizeWall = 1, bool IsGlass = false, float zIndex = 1)
         {
             this.Name = Name;

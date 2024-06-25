@@ -128,7 +128,7 @@ public static class MathUtils
             foreach (Collision col in ray.Colisions)
             {
                 float midleZIndex = MathF.Abs(col.obj.zIndex - (zIndex+1));
-                if (midleZIndex >= 1.8f)
+                if (midleZIndex >= 1.8f && !col.obj.IsGlass)
                     continue;
                 if (MathUtils.Distance(newPos, col.Pos) < 5) // Определить столкновение
                 {

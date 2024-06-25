@@ -47,76 +47,69 @@ namespace SFML_RayCasting.Menedgers
 
         public List<Ray> rays { get; private set; } = new List<Ray>();
 
-        public void CalcRay()
-        {
-            List<Ray> rays = new List<Ray>();
-            int numSteps = (int)(this.width / this.step);
+		public void CalcRay()
+		{
+			List<Ray> rays = new List<Ray>();
+			int numSteps = (int)(this.width / this.step);
+			var objs = map.Objects;
 
-            var objs = map.Objects;
+			for (int n = 0; n <= numSteps; n++)
+			{
+				int recursionDepth = 1;
+				float relativeAngle = (this.POV / 2 * -1) + (this.POV / numSteps) * n;
+				float angle = map.camera.Angle + relativeAngle;
+				Vector2f direction = new Vector2f((float)Math.Cos(MathUtils.DegreesToRadians(angle)), (float)Math.Sin(MathUtils.DegreesToRadians(angle)));
+				Ray rayRoot = Ray.CreateRay(map.camera.Position, direction, map.rayLength);
+				Vector2f start = map.camera.Position;
+				Ray ray = rayRoot;
 
-            for (int n = 0; n <= numSteps; n++)
-            {
-                int stepResurse = 1;
+				while (true)
+				{
+					foreach (var obj in objs)
+					{
+						List<Collision> collisions = obj.CheckColision(ray, map.camera.zIndex);
+						ray.Colisions.AddRange(collisions);
+					}
 
-                float relativeAngle = (this.POV / 2 * -1) + (this.POV / numSteps) * n;
-                float angle = map.camera.Angle + relativeAngle;
+					ray.Colisions.Sort((v1, v2) => MathUtils.Distance(start, v1.Pos).CompareTo(MathUtils.Distance(start, v2.Pos)));
 
-                Vector2f direction = new Vector2f((float)Math.Cos(MathUtils.DegreesToRadians(angle)), (float)Math.Sin(MathUtils.DegreesToRadians(angle)));
-                Ray rayRoot = Ray.CreateRay(map.camera.Position, direction, map.rayLength);
-                Vector2f start = map.camera.Position;
-                Ray ray = rayRoot;
+					if (ray.Colisions.Count > 0)
+					{
+						Collision closestCollision = ray.Colisions.First();
 
-                while (true)
-                {
-                    foreach (var obj in objs)
-                    {
-                        List<Collision> col = obj.CheckColision(ray, map.camera.zIndex);
-                        ray.Colisions.AddRange(col);
-                    }
+						if (closestCollision.IsGlass && recursionDepth < maxRecurse && isNeedRecurce)
+						{
+							recursionDepth++;
+							Vector2f reflectionDirection = MathUtils.GetReflectedVector(ray.Direction, closestCollision.NornalCollison.Item2, closestCollision.NornalCollison.Item1);
 
-                    ray.Colisions.Sort((v1, v2) => {
-                        float distance1 = MathUtils.Distance(start, v1.Pos);
-                        float distance2 = MathUtils.Distance(start, v2.Pos);
+							// Слегка сдвигаем начало нового луча, чтобы избежать зацикливания на той же нормали
+							Vector2f newStartPos = MathUtils.StepToPoint(closestCollision.Pos, start, 0.001f);
+							Ray reflectedRay = Ray.CreateRay(newStartPos, reflectionDirection, ray.MaxLen - MathUtils.Distance(start, closestCollision.Pos));
 
-                        return distance1.CompareTo(distance2);
-                    });
+							closestCollision.next = reflectedRay;
+							start = closestCollision.Pos;
+							ray = reflectedRay;
+						}
+						else
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
 
-                    if (ray.Colisions.Count > 0)
-                    {
-                        Collision collis = ray.Colisions.First();
+				rays.Add(rayRoot);
+			}
 
-                        if (collis.IsGlass && stepResurse < maxRecurse && isNeedRecurce)
-                        {
-                            stepResurse++;
+			this.rays = rays;
+		}
 
-                            Vector2f reflect = MathUtils.GetReflectedVector(ray.Direction, collis.NornalCollison.Item2, collis.NornalCollison.Item1);
 
-                            // Кослтыль позволяющий не отрожаться в одну и туже нормаль
-                            Vector2f newPos = MathUtils.StepToPoint(collis.Pos, start, 0.001f);
 
-                            Ray nextRay = Ray.CreateRay(newPos, reflect, ray.MaxLen - MathUtils.Distance(start, collis.Pos));
-                            collis.next = nextRay;
-
-                            start = collis.Pos;
-                            ray = nextRay;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                rays.Add(rayRoot);
-            }
-            this.rays = rays;   
-        }
-        
-        public void SaveOnlyCollision()
+		public void SaveOnlyCollision()
         {
             List<Ray> rays = new List<Ray>();
 
