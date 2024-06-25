@@ -19,18 +19,17 @@ namespace SFML_RayCasting
 				DrawSky(dist, i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex);
 				if (rays[i].Colisions.Count > 0)
 				{
-					for (int j = rays[i].Colisions.Count - 1; j > 0; j--)
+					for (int j = rays[i].Colisions.Count - 1; j >= 0; j--)
 					{
 						Collision colis = rays[i].Colisions[j];
 
-						DrawCollision(colis, rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex, true);
+						DrawCollision(colis, rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex, true, 0, WindowMenedger.Height);
 					}
-					DrawCollision(rays[i].Colisions.First(), rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex, true);
 				}
 
 			}
 		}
-		private static void DrawCollision(Collision colis, Ray ray, int i, float rAngle, float middleHeight, float stepWidth, float zIndexPos, bool glass = false)
+		private static void DrawCollision(Collision colis, Ray ray, int i, float rAngle, float middleHeight, float stepWidth, float zIndexPos, bool glass = false, float maxUpPoint = float.MaxValue, float minDownPoint = float.MaxValue)
 		{
 			AbsObject obj = colis.obj;
 			float dist = colis.Dist;
@@ -66,6 +65,7 @@ namespace SFML_RayCasting
 
 				sp.Scale = new Vector2f(stepWidth / sp.TextureRect.Width, wallHeight / sp.TextureRect.Height);
 
+
 				WindowMenedger.window.Draw(sp);
 				if (colis.IsGlass && colis.next != null && glass)
 				{
@@ -82,12 +82,8 @@ namespace SFML_RayCasting
 						{
 
 							colis.next.Colisions[j].Dist += colis.Dist;
-							DrawCollision(colis.next.Colisions[j], ray, i, rAngle, middleHeight, stepWidth, zIndexPos, glass);
+							DrawCollision(colis.next.Colisions[j], ray, i, rAngle, middleHeight, stepWidth, zIndexPos, glass, upHeight, downHeight);
 						}
-						//Collision coliss = colis.next.Colisions.First() ;
-
-						//               coliss.Dist += colis.Dist;
-						//               DrawCollision(coliss, ray, i, rAngle, middleHeight, stepWidth, zIndexPos, glass);
 
 					}
 					catch
@@ -99,41 +95,6 @@ namespace SFML_RayCasting
 				}
 				return;
 			}
-			/*
-            Color color = new Color(15,15,15,255);
-
-            Vertex[] vertices =
-            {
-                new Vertex(new Vector2f(stepWidth * i, upHeight), color),
-                new Vertex(new Vector2f(stepWidth * i + stepWidth, upHeight), color),
-                new Vertex(new Vector2f(stepWidth * i + stepWidth, downHeight), color),
-                new Vertex(new Vector2f(stepWidth * i, downHeight), color)
-            };
-
-            WindowMenedger.DrawVertex(vertices, PrimitiveType.Quads);
-			if (colis.IsGlass && colis.next != null && glass)
-			{
-				try
-				{
-                    if(colis.next.Colisions.Count == 0)
-                    {
-						float dis2t = MathUtils.Distance(ray.StartPos, ray.EndPoint);
-						DrawSky(colis.LastDist, i, rAngle, middleHeight, stepWidth, zIndexPos);
-                        return;
-					}
-					Collision coliss = colis.next.Colisions.First() ;
-
-                    coliss.Dist += colis.Dist;
-                    DrawCollision(coliss, ray, i, rAngle, middleHeight, stepWidth, zIndexPos, glass);
-                    
-				}
-				catch {
-					float dis2t = MathUtils.Distance(ray.StartPos, ray.EndPoint);
-                    DrawSky(dist, i, rAngle, middleHeight, stepWidth, zIndexPos);
-
-				}
-			}
-            */
 		}
 		private static void DrawSky(float dist, int i, float rAngle, float middleHeight, float stepWidth, float zIndexPos)
 		{
