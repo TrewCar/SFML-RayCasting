@@ -23,7 +23,7 @@ namespace SFML_RayCasting
 					{
 						Collision colis = rays[i].Colisions[j];
 
-						DrawCollision(colis, rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex);
+						DrawCollision(colis, rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex, true);
 					}
 					DrawCollision(rays[i].Colisions.First(), rays[i], i, map.camera.Angle - rays[i].Angle, middleHeight, stepWidth, map.camera.zIndex, true);
 				}
@@ -154,7 +154,7 @@ namespace SFML_RayCasting
 			float upHeight = (middleHeight - wallHeight / 2.0f - middle / 2);
 			float downHeight = (middleHeight + wallHeight / 2.0f + middle / 2);
 
-			Color color = new Color(255, 255, 255, 255);
+			Color color = new Color(0, 0, 0, 255);
 
 			Vertex[] vertices =
 			{

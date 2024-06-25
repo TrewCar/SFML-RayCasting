@@ -75,9 +75,17 @@ namespace SFML_RayCasting.Menedgers
 
 					if (ray.Colisions.Count > 0)
 					{
-						Collision closestCollision = ray.Colisions.First();
+                        Collision closestCollision = null;
+                        foreach (var collision in ray.Colisions)
+                        {
+                            if (collision.IsGlass)
+                            {
+                                closestCollision = collision;
+                                break;
+                            }
+                        }
 
-						if (closestCollision.IsGlass && recursionDepth < maxRecurse && isNeedRecurce)
+						if (closestCollision != null && closestCollision.IsGlass && recursionDepth < maxRecurse && isNeedRecurce)
 						{
 							recursionDepth++;
 							Vector2f reflectionDirection = MathUtils.GetReflectedVector(ray.Direction, closestCollision.NornalCollison.Item2, closestCollision.NornalCollison.Item1);
