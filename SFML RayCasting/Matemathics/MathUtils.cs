@@ -119,34 +119,44 @@ public static class MathUtils
 
         return new Vector2f(newX, newY);
     }
-    public static Vector2f AdjustMovementForCollision(Vector2f newPos, float zIndex, List<Ray> rays, Vector2f originalMove)
-    {
-        Vector2f adjustedMove = originalMove;
+	public static Vector2f AdjustMovementForCollision(Vector2f newPos, float zIndex, List<Ray> rays, Vector2f originalMove)
+	{
+		Vector2f adjustedMove = originalMove;
 
-        foreach (Ray ray in rays)
-        {
-            foreach (Collision col in ray.Colisions)
-            {
-                float midleZIndex = MathF.Abs(col.obj.zIndex - (zIndex+1));
-                if (midleZIndex >= 1.8f && !col.obj.IsGlass)
-                    continue;
-                if (MathUtils.Distance(newPos, col.Pos) < 5) // Определить столкновение
-                {
-                    Vector2f normal = col.NornalCollison.Item1 - col.NornalCollison.Item2;
-                    normal = MathUtils.Normalized(new Vector2f(-normal.Y, normal.X));
+		foreach (Ray ray in rays)
+		{
+			foreach (Collision col in ray.Colisions)
+			{
+				float midleZIndex;
 
-                    // Проецируем направление движения на нормаль поверхности, чтобы получить направление скольжения
-                    float dotProduct = MathUtils.Dot(adjustedMove, normal);
-                    Vector2f slideDirection = adjustedMove - dotProduct * normal;
+				// Учет размера стены в расчете midleZIndex
+				if (zIndex > col.obj.zIndex && col.obj.SizeWall > 1)
+					 midleZIndex = MathF.Abs((col.obj.zIndex + col.obj.SizeWall )- zIndex-1);
+				else if (zIndex > col.obj.zIndex && col.obj.SizeWall < 1)
+					midleZIndex = MathF.Abs((col.obj.zIndex - col.obj.SizeWall) - zIndex - 1);
+				else
+					midleZIndex = MathF.Abs(col.obj.zIndex - (zIndex + 1));
 
-                    // Корректируем направление движения, чтобы включить скольжение
-                    adjustedMove = slideDirection;
+				if (midleZIndex >= 1.8f)
+					continue;
 
-                    break;
-                }
-            }
-        }
+				if (MathUtils.Distance(newPos, col.Pos) < 15) // Определить столкновение
+				{
+					Vector2f normal = col.NornalCollison.Item1 - col.NornalCollison.Item2;
+					normal = MathUtils.Normalized(new Vector2f(-normal.Y, normal.X));
 
-        return adjustedMove;
-    }
+					// Проецируем направление движения на нормаль поверхности, чтобы получить направление скольжения
+					float dotProduct = MathUtils.Dot(adjustedMove, normal);
+					Vector2f slideDirection = adjustedMove - dotProduct * normal;
+
+					// Корректируем направление движения, чтобы включить скольжение
+					adjustedMove = slideDirection;
+
+					break;
+				}
+			}
+		}
+
+		return adjustedMove;
+	}
 }

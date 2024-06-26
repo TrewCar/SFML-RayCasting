@@ -29,7 +29,7 @@ namespace SFML_RayCasting.Maps
             Objects.Add(obj1);
 
             //"Textures\\breekWall2.jpg"
-            VertexObject obj2 = new VertexObject("Name1", new Vector2f(50, 600), new Color(15, 15, 15, 255), 1f, true, 3);
+            VertexObject obj2 = new VertexObject("Name2", new Vector2f(50, 600), new Color(15, 15, 15, 255), 1f, true, 3);
 			obj2.AddRelativePoint(new Vector2f(0, 0));
 			obj2.AddRelativePoint(new Vector2f(400, 0));
 			obj2.AddRelativePoint(new Vector2f(400, 50));
@@ -41,7 +41,7 @@ namespace SFML_RayCasting.Maps
 			obj2.AddConnection(1, 2);
 			obj2.AddConnection(2, 3);
 			obj2.AddConnection(3, 0);
-			Objects.Add(obj2);
+			//Objects.Add(obj2);
 
 			//VertexObject obj2 = new VertexObject("Name1", new Vector2f(50, 600), "Textures\\wolf.jpg", 3, false, 0.5f);
 			//obj2.AddRelativePoint(new Vector2f(0, 0));
@@ -58,7 +58,7 @@ namespace SFML_RayCasting.Maps
 			//Objects.Add(obj2);
 
 
-			VertexObject obj3 = new VertexObject("Name2", new Vector2f(50, 50), "Textures\\breekWall2.jpg",1 , false,1);
+			VertexObject obj3 = new VertexObject("Name3", new Vector2f(50, 50), "Textures\\breekWall2.jpg",1 , false,1);
             obj3.AddRelativePoint(new Vector2f(0, 0));
             obj3.AddRelativePoint(new Vector2f(800, 0));
             obj3.AddRelativePoint(new Vector2f(800, 50));
@@ -72,7 +72,7 @@ namespace SFML_RayCasting.Maps
             obj3.AddConnection(3, 0);
             Objects.Add(obj3);
 
-            VertexObject obj4 = new VertexObject("Name3", new Vector2f(50, 800), "Textures\\wolf.jpg",1f , false, 1);
+            VertexObject obj4 = new VertexObject("Name4", new Vector2f(50, 800), "Textures\\wolf.jpg",1f , false, 1);
             obj4.AddRelativePoint(new Vector2f(0, 0));
             obj4.AddRelativePoint(new Vector2f(800, 0));
             obj4.AddRelativePoint(new Vector2f(800, 50));
@@ -86,7 +86,7 @@ namespace SFML_RayCasting.Maps
             obj4.AddConnection(3, 0);
             Objects.Add(obj4);
 
-            obj4 = new VertexObject("Name3", new Vector2f(50, 800), "Textures\\wolf.jpg", 1f, false, 3);
+            obj4 = new VertexObject("Name5", new Vector2f(50, 800), "Textures\\wolf.jpg", 1f, false, 3);
             obj4.AddRelativePoint(new Vector2f(0, 0));
             obj4.AddRelativePoint(new Vector2f(800, 0));
             obj4.AddRelativePoint(new Vector2f(800, 50));
@@ -100,7 +100,7 @@ namespace SFML_RayCasting.Maps
             obj4.AddConnection(3, 0);
             Objects.Add(obj4);
 
-            VertexObject obj5 = new VertexObject("Name4", new Vector2f(800, 50), "Textures\\breekWall2.jpg",1 , false,1);
+            VertexObject obj5 = new VertexObject("Name6", new Vector2f(800, 50), "Textures\\breekWall2.jpg",1 , false,1);
 
             obj5.AddRelativePoint(new Vector2f(0, 0));
             obj5.AddRelativePoint(new Vector2f(0, 800));
@@ -115,7 +115,7 @@ namespace SFML_RayCasting.Maps
             obj5.AddConnection(3, 0);
             Objects.Add(obj5);
 
-			obj5 = new VertexObject("Name4", new Vector2f(100, 700), "Textures\\breekWall2.jpg", 1, false, 1);
+			obj5 = new VertexObject("Name7", new Vector2f(100, 700), "Textures\\breekWall2.jpg", 1, false, 1);
 
 			obj5.AddRelativePoint(new Vector2f(0, 0));
 			obj5.AddRelativePoint(new Vector2f(0, 800));
@@ -131,7 +131,7 @@ namespace SFML_RayCasting.Maps
 			Objects.Add(obj5);
 
 
-			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(400, 400), 20, 50f, "Textures\\wolf.jpg", 1, false));
+			Objects.Add(AbsObject.InstanceCircule("Name8", new Vector2f(400, 400), 20, 50f, "Textures\\wolf.jpg", 1, false));
             //Objects.Add(AbsObject.InstanceCircule("Name6", new Vector2f(400, 200), 4, 50f, "Textures\\breekWall2.jpg", 1, false));
         }
     }

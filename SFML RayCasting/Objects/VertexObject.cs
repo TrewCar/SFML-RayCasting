@@ -116,7 +116,7 @@ namespace SFML_RayCasting.Objects
         }
 
 
-        public override Sprite GetSegment(Collision collision, float segmentWidth)
+        public override Sprite GetSegment(Collision collision, float segmentWidth, float setUp, float setDown, float wallHeight)
         {
 
             Vector2f point = collision.Pos;
@@ -131,28 +131,13 @@ namespace SFML_RayCasting.Objects
             while (index >= 1)
                 index -= 1;
 
-            Sprite sprite;
+            Sprite sprite = new Sprite(texture);
 
-            if (texture == null)
-            {
-				texture = new Texture(300, 300);
-                sprite = new Sprite(texture);
-				var sz = texture.Size;
-				distPyWidhtTexture = 50 * SizeWall * ((float)sz.X * (float)sz.Y) / ((float)sz.Y * (float)sz.Y);
-				sprite.Color = this.Color;
+            //setUp = (setUp / wallHeight) * texture.Size.Y;
+            //setDown = (setDown / wallHeight) * texture.Size.Y;
 
 
-                texture = null;
-			}
-            else
-            {
-				sprite = new Sprite(texture);
-
-			}
-
-          
-
-            float xOnTexture = (float)texture.Size.X * index;
+			float xOnTexture = (float)texture.Size.X * index;
 
             float xStart = xOnTexture - segmentWidth / 2;
             float xEnd = xOnTexture + segmentWidth / 2;
@@ -161,8 +146,9 @@ namespace SFML_RayCasting.Objects
             if (xStart < 0) xStart = 0;
             if (xEnd > texture.Size.X) xEnd = texture.Size.X;
 
-            // Create a rectangle for the texture part to be used in the sprite
-            sprite.TextureRect = new IntRect((int)xStart, 0, ((int)xEnd - (int)xStart), (int)texture.Size.Y);
+
+			// Create a rectangle for the texture part to be used in the sprite
+			sprite.TextureRect = new IntRect((int)xStart, (int)setUp, ((int)xEnd - (int)xStart), ((int)texture.Size.Y - (int)setDown - (int)setUp));
 
             return sprite;
         }

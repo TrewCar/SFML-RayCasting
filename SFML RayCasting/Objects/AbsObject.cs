@@ -67,7 +67,7 @@ namespace SFML_RayCasting.Objects
         public abstract void Draw();
         protected string pathToTexture;
         protected SFML.Graphics.Texture texture;
-        public abstract Sprite GetSegment(Collision collision, float widht);
+        public abstract Sprite GetSegment(Collision collision, float widht, float setUp, float setDown, float wallHeight);
 
 
         public static VertexObject InstanceCircule(string Name, Vector2f pos, int Points, float radius, SFML.Graphics.Color color, float SizeWall, bool IsGlass = false)

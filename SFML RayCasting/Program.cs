@@ -8,7 +8,7 @@ class Program
     {
         int width = 1620;
         int height = 1024;
-        float step = 25;
+        float step = 3;
         float rayLength = maxDistRay;
 
         Camera camera = new Camera(new Vector2f(350, 350), 0.0f);

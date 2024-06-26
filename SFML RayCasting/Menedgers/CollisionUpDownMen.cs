@@ -15,32 +15,37 @@ namespace SFML_RayCasting.Menedgers
 		{
 			List<AbsObject> objs = map.Objects;
 
-			List<(float, AbsObject)> listZIndex = new List<(float, AbsObject)> ();
+			List<(float, float, AbsObject)> listZIndex = new List<(float, float, AbsObject)>(); // Добавляем верхний zIndex
 
 			foreach (AbsObject obj in objs)
 			{
-				if(obj is VertexObject item)
+				if (obj is VertexObject item)
 				{
 					var res = item.IsPointInside(pos);
-					if(res) listZIndex.Add((item.zIndex, item));
+					if (res)
+					{
+						float upperZIndex = obj.SizeWall > 1 ? item.zIndex + item.SizeWall : obj.SizeWall == 1 ? item.zIndex : item.zIndex - item.SizeWall; // Рассчитываем верхний zIndex с учётом высоты стены
+						listZIndex.Add((item.zIndex, upperZIndex, item));
+					}
 				}
 			}
 
-			listZIndex.Sort((a,b) => a.Item1.CompareTo(b.Item1));
+			listZIndex.Sort((a, b) => a.Item1.CompareTo(b.Item1));
 			float closestLowerValue = float.MinValue; // Инициализируем минимальным значением
 			float closestUpperValue = float.MaxValue; // Инициализируем максимальным значением
 
 			foreach (var item in listZIndex)
 			{
-				float currentValue = item.Item1;
+				float lowerValue = item.Item1;
+				float upperValue = item.Item2;
 
-				if (currentValue < zIndex)
+				if (upperValue < zIndex)
 				{
-					closestLowerValue = currentValue; // Обновляем ближайшее меньшее значение
+					closestLowerValue = Math.Max(closestLowerValue, upperValue); // Обновляем ближайшее меньшее значение
 				}
-				else if (currentValue > zIndex && currentValue < closestUpperValue)
+				else if (lowerValue > zIndex && lowerValue < closestUpperValue)
 				{
-					closestUpperValue = currentValue; // Обновляем ближайшее большее значение
+					closestUpperValue = lowerValue; // Обновляем ближайшее большее значение
 				}
 			}
 
