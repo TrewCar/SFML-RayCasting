@@ -29,7 +29,7 @@ namespace SFML_RayCasting.Maps
             Objects.Add(obj1);
 
             //"Textures\\breekWall2.jpg"
-            VertexObject obj2 = new VertexObject("Name2", new Vector2f(50, 600), new Color(15, 15, 15, 255), 1f, true, 3);
+            VertexObject obj2 = new VertexObject("Name2", new Vector2f(50, 300), new Color(15, 15, 15, 255), 1f, true, 1);
 			obj2.AddRelativePoint(new Vector2f(0, 0));
 			obj2.AddRelativePoint(new Vector2f(400, 0));
 			obj2.AddRelativePoint(new Vector2f(400, 50));
@@ -41,7 +41,7 @@ namespace SFML_RayCasting.Maps
 			obj2.AddConnection(1, 2);
 			obj2.AddConnection(2, 3);
 			obj2.AddConnection(3, 0);
-			//Objects.Add(obj2);
+			Objects.Add(obj2);
 
 			//VertexObject obj2 = new VertexObject("Name1", new Vector2f(50, 600), "Textures\\wolf.jpg", 3, false, 0.5f);
 			//obj2.AddRelativePoint(new Vector2f(0, 0));

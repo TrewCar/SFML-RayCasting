@@ -3,7 +3,7 @@ using SFML_RayCasting.Maps;
 
 class Program
 {
-    public static float maxDistRay = 2000;
+    public static float maxDistRay = 900;
     static void Main()
     {
         int width = 1620;
