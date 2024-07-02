@@ -162,4 +162,12 @@ public static class MathUtils
 
 		return adjustedMove;
 	}
+
+    public static Vector2f DirectionFromPoitns(Vector2f v1, Vector2f v2)
+    {
+        Vector2f AB = v2 - v1;
+        // Нормализуем вектор, чтобы получить единичный вектор направления
+        Vector2f direction = Normalized(AB);
+        return direction;
+    }
 }

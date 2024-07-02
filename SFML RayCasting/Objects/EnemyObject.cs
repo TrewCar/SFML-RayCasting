@@ -35,7 +35,7 @@ namespace SFML_RayCasting.Objects
             Vector2f B = C - radius * perpendicular;
             return (A, B);
         }
-        public override void Update(Vector2f pos, float deltaTime)
+        public override void Update(Vector2f pos, float deltaTime, MapDef map)
         {
             // Найдем точки A и B
             (Vector2f A, Vector2f B) = FindPoints(Position, pos, radius);
