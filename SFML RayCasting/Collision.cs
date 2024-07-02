@@ -18,5 +18,6 @@ namespace SFML_RayCasting
         public float LastDist;
 
         public Ray next = null;
+        public Ray _this = null;
     }
 }

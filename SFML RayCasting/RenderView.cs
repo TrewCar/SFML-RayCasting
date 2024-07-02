@@ -48,6 +48,10 @@ public class RenderView
             WindowMenedger.Clear(Color.Black);
 
             OnPreviewCalcRay.Invoke();
+            foreach (var obj in map.Objects)
+            {
+                obj.Update(map.camera.Position, fpsCounter.deltaTime);
+            }
 
             this.raysView.CalcRay();
 
@@ -66,7 +70,7 @@ public class RenderView
     private void DrawMap()
     {
         RenderWindowView.Render(map, raysView.rays);
-        //map.Draw();
-        //raysView.DrawRays(primitiveMap);
+        map.Draw();
+        raysView.DrawRays(primitiveMap);
     }
 }

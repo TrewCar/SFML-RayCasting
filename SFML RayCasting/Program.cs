@@ -11,7 +11,7 @@ class Program
         float step = 3;
         float rayLength = maxDistRay;
 
-        Camera camera = new Camera(new Vector2f(130, 130), 0.0f);
+        Camera camera = new Player(new Vector2f(130, 130), 0.0f);
         MapDef map = new MapTest();
 
         map.width = width;

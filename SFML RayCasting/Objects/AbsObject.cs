@@ -60,6 +60,8 @@ namespace SFML_RayCasting.Objects
 
         public float zIndex = 0;
 
+        public bool isCollision = true;
+
         public bool IsGlass = false;
         public string Name { get; }
         public Vector2f Position { get; set; }
@@ -121,6 +123,11 @@ namespace SFML_RayCasting.Objects
 
             // Добавляем круг в коллекцию объектов
             return circle;
+        }
+
+        public virtual void Update(Vector2f pos, float deltaTime)
+        {
+
         }
 
     }

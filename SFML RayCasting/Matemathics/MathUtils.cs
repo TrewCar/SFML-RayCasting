@@ -127,6 +127,9 @@ public static class MathUtils
 		{
 			foreach (Collision col in ray.Colisions)
 			{
+                if(!col.obj.isCollision)
+                    continue;
+
 				float midleZIndex;
 
 				// Учет размера стены в расчете midleZIndex

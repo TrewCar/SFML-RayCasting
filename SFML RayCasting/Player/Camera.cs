@@ -17,12 +17,12 @@ public class Camera
 
     public float zIndex = 0; // позиция по оси прыжка
 
-    private float jumpVelocity = 0; // Скорость прыжка
-    private bool isJumping = false; // Находится ли игрок в прыжке
-    private const float gravity = -9.81f; // Гравитация (отрицательное значение для падения вниз)
-    private float jumpStrength; // Начальная скорость прыжка
-    private float groundLevel = 0; // Уровень земли (где игрок стоит)
-    private const float desiredJumpHeight = 2.0f; // Желаемая высота прыжка
+    protected float jumpVelocity = 0; // Скорость прыжка
+    protected bool isJumping = false; // Находится ли игрок в прыжке
+    protected const float gravity = -9.81f; // Гравитация (отрицательное значение для падения вниз)
+    protected float jumpStrength; // Начальная скорость прыжка
+    protected float groundLevel = 0; // Уровень земли (где игрок стоит)
+    protected const float desiredJumpHeight = 2.0f; // Желаемая высота прыжка
 
     public Camera(Vector2f startPosition, float startAngle)
     {
@@ -55,49 +55,18 @@ public class Camera
     Vector2f directionMove = new Vector2f();
 	private float upLevel;
 
-	public void OnKeyPressed(object sender, KeyEventArgs e)
+	public virtual void OnKeyPressed(object sender, KeyEventArgs e)
     {
-
-        if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-        {
-            //if (!isJumping)
-                zIndex += 5f;
-            //groundLevel += 0.05f;
-        }
-        if (e.Code == Keyboard.Key.L)
-        {
-            //if (!isJumping)
-            //    zIndex -= 0.05f;
-            groundLevel -= 2f;
-        }
     }
     public virtual void OnMouseMoved(object sender, MouseMoveEventArgs e)
     {
-        // Определяем разницу в позиции мыши по горизонтали
-        float mouseDeltaX = e.X - previousMouseX;
-
-        // Изменяем угол поворота камеры в зависимости от движения мыши
-        if (mouseDeltaX != 0)
-        {
-            float rotationSpeed = velosityMouse; // Скорость вращения камеры с помощью мыши
-            this.Rotate(mouseDeltaX * rotationSpeed);
-        }
-
-        // Обновляем предыдущую позицию мыши
-        previousMouseX = e.X;
     }
-    public void Tick(float deltaTime, MapDef map)
+    public virtual void Tick(float deltaTime, MapDef map)
     {
-        Vector2f directionMove = new Vector2f();
-        if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-            directionMove += this.GetDirection() * speedVelosity * deltaTime;
-        if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-            directionMove += this.GetDirection() * -speedVelosity * deltaTime;
-        if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-            directionMove += this.GetPerpendicularDirection() * -speedVelosity * deltaTime;
-        if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-            directionMove += this.GetPerpendicularDirection() * speedVelosity * deltaTime;
 
+    }
+    protected void AdjastiveMove(float deltaTime, MapDef map, Vector2f directionMove)
+    {
         Vector2f camPos = this.Position;
 
         if (directionMove != new Vector2f(0, 0))
@@ -122,23 +91,23 @@ public class Camera
             jumpVelocity = jumpStrength;
         }
 
-        if(groundLevel < zIndex && !isJumping || zIndex > upLevel)
+        if (groundLevel < zIndex && !isJumping || zIndex > upLevel)
         {
             isJumping = true;
             jumpVelocity = -1;
         }
-		var res = CollisionUpDownMen.CalczIndex(camPos, zIndex, map);
-		if (res.down > 0)
-			groundLevel = res.down + 1;
-		else
-			groundLevel = 0;
+        var res = CollisionUpDownMen.CalczIndex(camPos, zIndex, map);
+        if (res.down > 0)
+            groundLevel = res.down + 1;
+        else
+            groundLevel = 0;
 
         if (res.up > 0)
-            upLevel = res.up-2;
+            upLevel = res.up - 2;
         else
             upLevel = float.MaxValue;
-		// Обновление позиции и скорости прыжка
-		if (isJumping)
+        // Обновление позиции и скорости прыжка
+        if (isJumping)
         {
 
             zIndex += jumpVelocity * deltaTime;
@@ -154,4 +123,5 @@ public class Camera
             }
         }
     }
+
 }

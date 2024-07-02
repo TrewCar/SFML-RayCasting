@@ -51,7 +51,7 @@ namespace SFML_RayCasting.Objects
                     minDist = Dist;
 
                     Collision min = new Collision();
-
+                    min._this = ray;
                     min.obj = this;
                     min.IsGlass = this.IsGlass;
                     min.Dist = Dist;
@@ -95,7 +95,7 @@ namespace SFML_RayCasting.Objects
             }
         }
 
-        private void CreateIndexTexture(int index1, int index2)
+        protected void CreateIndexTexture(int index1, int index2)
         {
             if (texture == null) return;
 

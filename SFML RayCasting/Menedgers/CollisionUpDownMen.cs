@@ -19,6 +19,7 @@ namespace SFML_RayCasting.Menedgers
 
 			foreach (AbsObject obj in objs)
 			{
+				if(!obj.isCollision) continue;
 				if (obj is VertexObject item)
 				{
 					var res = item.IsPointInside(pos);
