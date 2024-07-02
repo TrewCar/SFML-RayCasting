@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
+using SFML_RayCasting.Maps;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -125,7 +126,7 @@ namespace SFML_RayCasting.Objects
             return circle;
         }
 
-        public virtual void Update(Vector2f pos, float deltaTime)
+        public virtual void Update(Vector2f pos, float deltaTime, MapDef map)
         {
 
         }

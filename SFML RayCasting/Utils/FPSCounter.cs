@@ -29,7 +29,7 @@ namespace SFML_RayCasting.Utils
             frameCount = 0;
             elapsedTime = 0;
             
-            stopwatch.Restart(); // Сбросить таймер для следующего кадра
+            stopwatch.Restart();
         }
     }
 }

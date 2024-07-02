@@ -1,4 +1,6 @@
 ﻿using SFML.System;
+using SFML_RayCasting.Maps;
+using SFML_RayCasting.Menedgers;
 using SFML_RayCasting.Objects;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,14 @@ namespace SFML_RayCasting.Enemy
             this.isCollision = false;
         }
 
-        public override void Update(Vector2f pos, float deltaTime)
+        public override void Update(Vector2f pos, float deltaTime, MapDef map)
         {
-            Position = MathUtils.StepToPoint(Position, pos, 15 * deltaTime);
+            if (MathUtils.Distance(pos, this.Position) < 20)
+                return;
 
-            base.Update(pos, deltaTime);
+            Position += MathUtils.DirectionFromPoitns(Position, pos) * (100 * deltaTime);
+
+            base.Update(pos, deltaTime, map);
         }
     }
 }
