@@ -70,7 +70,7 @@ public class RenderView
     private void DrawMap()
     {
         RenderWindowView.Render(map, raysView.rays);
-        //map.Draw();
-        //raysView.DrawRays(primitiveMap);
+        map.Draw();
+        raysView.DrawRays(primitiveMap);
     }
 }
