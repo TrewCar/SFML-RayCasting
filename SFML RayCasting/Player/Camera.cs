@@ -84,7 +84,6 @@ public class Camera
         }
 
 
-        // Проверка нажатия пробела для начала прыжка
         if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isJumping)
         {
             isJumping = true;
@@ -106,14 +105,13 @@ public class Camera
             upLevel = res.up - 2;
         else
             upLevel = float.MaxValue;
-        // Обновление позиции и скорости прыжка
+
         if (isJumping)
         {
 
             zIndex += jumpVelocity * deltaTime;
             jumpVelocity += gravity * deltaTime;
 
-            // Проверка, если игрок достиг земли
             if (zIndex <= groundLevel)
             {
                 zIndex = groundLevel;

@@ -62,7 +62,6 @@ namespace SFML_RayCasting.Objects
                 }
             }
                 return collisions;
-            // Вернуть модифицированный луч с найденными коллизиями
         }
         public override void Draw()
         {
@@ -123,7 +122,7 @@ namespace SFML_RayCasting.Objects
             (Vector2f, Vector2f) normal = collision.NornalCollison;
 
             float distance = MathUtils.Distance(normal.Item1, point);
-            float index = distance / distPyWidhtTexture; // Используем 100 единиц расстояния как одну ширину текстуры
+            float index = distance / distPyWidhtTexture;
             float indexNormal = textureIndex[normal.Item1];
 
             index += indexNormal;
@@ -142,12 +141,10 @@ namespace SFML_RayCasting.Objects
             float xStart = xOnTexture - segmentWidth / 2;
             float xEnd = xOnTexture + segmentWidth / 2;
 
-            // Ensure the coordinates are within the texture boundaries
             if (xStart < 0) xStart = 0;
             if (xEnd > texture.Size.X) xEnd = texture.Size.X;
 
 
-			// Create a rectangle for the texture part to be used in the sprite
 			sprite.TextureRect = new IntRect((int)xStart, (int)setUp, ((int)xEnd - (int)xStart), ((int)texture.Size.Y - (int)setDown - (int)setUp));
 
             return sprite;
@@ -161,7 +158,6 @@ namespace SFML_RayCasting.Objects
 				Vector2f p1 = connection.Item1;
 				Vector2f p2 = connection.Item2;
 
-				// Проверяем пересечение горизонтального луча вправо от точки с ребром многоугольника
 				if (((p1.Y <= point.Y && point.Y < p2.Y) || (p2.Y <= point.Y && point.Y < p1.Y)) &&
 					(point.X < (p2.X - p1.X) * (point.Y - p1.Y) / (p2.Y - p1.Y) + p1.X))
 				{
@@ -169,7 +165,6 @@ namespace SFML_RayCasting.Objects
 				}
 			}
 
-			// Если количество пересечений нечетное, точка внутри многоугольника
 			return (crossings % 2 == 1);
 		}
 

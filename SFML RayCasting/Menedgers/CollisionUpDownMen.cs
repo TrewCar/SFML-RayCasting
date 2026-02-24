@@ -15,7 +15,7 @@ namespace SFML_RayCasting.Menedgers
 		{
 			List<AbsObject> objs = map.Objects;
 
-			List<(float, float, AbsObject)> listZIndex = new List<(float, float, AbsObject)>(); // Добавляем верхний zIndex
+			List<(float, float, AbsObject)> listZIndex = new List<(float, float, AbsObject)>();
 
 			foreach (AbsObject obj in objs)
 			{
@@ -32,8 +32,8 @@ namespace SFML_RayCasting.Menedgers
 			}
 
 			listZIndex.Sort((a, b) => a.Item1.CompareTo(b.Item1));
-			float closestLowerValue = float.MinValue; // Инициализируем минимальным значением
-			float closestUpperValue = float.MaxValue; // Инициализируем максимальным значением
+			float closestLowerValue = float.MinValue; 
+			float closestUpperValue = float.MaxValue;
 
 			foreach (var item in listZIndex)
 			{
@@ -42,21 +42,19 @@ namespace SFML_RayCasting.Menedgers
 
 				if (upperValue < zIndex)
 				{
-					closestLowerValue = Math.Max(closestLowerValue, upperValue); // Обновляем ближайшее меньшее значение
+					closestLowerValue = Math.Max(closestLowerValue, upperValue);
 				}
 				else if (lowerValue > zIndex && lowerValue < closestUpperValue)
 				{
-					closestUpperValue = lowerValue; // Обновляем ближайшее большее значение
+					closestUpperValue = lowerValue;
 				}
 			}
 
-			// Если не найдено ни одного значения меньше zIndex, возвращаем 0 вместо float.MinValue
 			if (closestLowerValue == float.MinValue)
 			{
 				closestLowerValue = 0;
 			}
 
-			// Если не найдено ни одного значения больше zIndex, возвращаем 0 вместо float.MaxValue
 			if (closestUpperValue == float.MaxValue)
 			{
 				closestUpperValue = 0;

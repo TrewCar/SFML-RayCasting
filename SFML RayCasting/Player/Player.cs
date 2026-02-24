@@ -45,17 +45,14 @@ internal class Player : Camera
     }
     public override void OnMouseMoved(object sender, MouseMoveEventArgs e)
     {
-        // Определяем разницу в позиции мыши по горизонтали
         float mouseDeltaX = e.X - previousMouseX;
 
-        // Изменяем угол поворота камеры в зависимости от движения мыши
         if (mouseDeltaX != 0)
         {
-            float rotationSpeed = velosityMouse; // Скорость вращения камеры с помощью мыши
+            float rotationSpeed = velosityMouse;
             this.Rotate(mouseDeltaX * rotationSpeed);
         }
 
-        // Обновляем предыдущую позицию мыши
         previousMouseX = e.X;
     }
 }

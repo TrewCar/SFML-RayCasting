@@ -14,6 +14,10 @@ class Program
         Camera camera = new Player(new Vector2f(130, 130), 0.0f);
         MapDef map = new MapTest();
 
+        //Camera camera = new Player(new Vector2f(350, 350), 0.0f);
+        //MapDef mapDef = new GlassMap();
+
+
         map.width = width;
         map.height = height;
         map.camera = camera;

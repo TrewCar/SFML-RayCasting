@@ -28,7 +28,7 @@ public static class MathUtils
         }
         else
         {
-            return new Vector2f(0,0); // Возвращаем вектор с нулевой длиной, если длина исходного вектора была нулевой
+            return new Vector2f(0,0);
         }
     }
 
@@ -53,7 +53,7 @@ public static class MathUtils
         // Находим параметр t для луча, который дает точку пересечения
         float t = ((rayToSegStart.X * segDir.Y - rayToSegStart.Y * segDir.X) / rayDirCrossSegDir);
 
-        // Проверяем, что точка пересечения лежит на луче (t >= 0)
+        // Проверяем, что точка пересечения лежит на луче 
         if (t >= 0)
         {
             // Находим координаты точки пересечения
@@ -101,19 +101,14 @@ public static class MathUtils
     }
     public static Vector2f StepToPoint(Vector2f v1, Vector2f v2, float step)
     {
-
-        // Находим вектор от a к b
         float dx = v2.X - v1.X;
         float dy = v2.Y - v1.Y;
 
-        // Находим длину вектора ab
         float length = MathF.Sqrt(dx * dx + dy * dy);
 
-        // Нормализуем вектор ab (единичный вектор в направлении от a к b)
         float ux = dx / length;
         float uy = dy / length;
 
-        // Находим новую точку c, сдвинувшись на distance вдоль вектора ab
         float newX = v1.X + step * ux;
         float newY = v1.Y + step * uy;
 
@@ -166,7 +161,6 @@ public static class MathUtils
     public static Vector2f DirectionFromPoitns(Vector2f v1, Vector2f v2)
     {
         Vector2f AB = v2 - v1;
-        // Нормализуем вектор, чтобы получить единичный вектор направления
         Vector2f direction = Normalized(AB);
         return direction;
     }
