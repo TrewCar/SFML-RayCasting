@@ -15,7 +15,7 @@ namespace SFML_RayCasting.Maps
         protected override void InitObjects()
         {
             //"Textures\\breekWall2.jpg"
-            VertexObject obj1 = new VertexObject("Name1", new Vector2f(50, 600), new Color(15, 15, 15, 255), 0.5f, true, 1);
+            VertexObject obj1 = new VertexObject("Name1", new Vector2f(50, 600), new Color(15, 15, 15, 255), 1f, true, 1);
             obj1.AddRelativePoint(new Vector2f(0, 0));
             obj1.AddRelativePoint(new Vector2f(400, 0));
             obj1.AddRelativePoint(new Vector2f(400, 50));
@@ -45,8 +45,9 @@ namespace SFML_RayCasting.Maps
 			Objects.Add(obj2);
 
 
-            Banana obj34 = new Banana("BananaEnemy1", new Vector2f(50, 150), 1);
+            RunRush obj34 = new RunRush("BananaEnemy1", new Vector2f(50, 150), 1);
             Objects.Add(obj34);
+
 
             //VertexObject obj2 = new VertexObject("Name1", new Vector2f(50, 600), "Textures\\wolf.jpg", 3, false, 0.5f);
             //obj2.AddRelativePoint(new Vector2f(0, 0));

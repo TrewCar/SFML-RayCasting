@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace SFML_RayCasting.Enemy
 {
-    internal class Banana : EnemyObject
+    internal class RunRush : EnemyObject
     {
-        public Banana(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, "Textures\\cat_clear.png", 1, false, zIndex)
+        public RunRush(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, "Textures\\run-rush.gif", 1, false, zIndex)
         {
             this.AddRelativePoint(new Vector2f(0, 0));
-            this.AddRelativePoint(new Vector2f(50, 0));
+            this.AddRelativePoint(new Vector2f(75, 0));
             this.Points.Reverse();
             this.AddConnection(0, 1);
             this.isCollision = false;

@@ -25,7 +25,7 @@ namespace SFML_RayCasting.Objects
 
 
 			// Создание изображения нужного размера
-			Image image = new Image(400, 400);
+			SFML.Graphics.Image image = new SFML.Graphics.Image(400, 400);
 
 			// Заполнение изображения указанным цветом
 			for (uint x = 0; x < 400; x++)
@@ -47,9 +47,21 @@ namespace SFML_RayCasting.Objects
             this.Name = Name;
             this.Position = pos;
             this.IsGlass = IsGlass;
-            this.texture = new Texture(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToTexture));
+            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToTexture);
+
+            Vector2u sz;
+
+            if (Path.GetExtension(fullPath).ToLower() == ".gif")
+            {
+                sz = LoadGif(fullPath);
+            }
+            else
+            {
+                texture = new Texture(fullPath);
+                sz = texture.Size;
+            }
             this.zIndex = zIndex;
-            var sz = texture.Size;
+
 
             distPyWidhtTexture = 50 * SizeWall * ((float)sz.X * (float)sz.Y) / ((float)sz.Y * (float)sz.Y);
 
@@ -128,7 +140,73 @@ namespace SFML_RayCasting.Objects
 
         public virtual void Update(Vector2f pos, float deltaTime, MapDef map)
         {
+            if (isAnimated && animationFrames.Count > 0)
+            {
+                frameTimer += deltaTime;
 
+                if (frameTimer >= frameTime)
+                {
+                    frameTimer = 0f;
+                    currentFrame = (currentFrame + 1) % animationFrames.Count;
+                    texture = animationFrames[currentFrame];
+                }
+            }
+        }
+
+        protected List<Texture> animationFrames;
+        protected int currentFrame = 0;
+        protected float frameTime = 0.1f; // время кадра
+        protected float frameTimer = 0f;
+        protected bool isAnimated = false;
+
+        private Vector2u LoadGif(string path)
+        {
+            animationFrames = new List<Texture>();
+
+            Vector2u sz = new();
+
+            using (System.Drawing.Image gifImg = System.Drawing.Image.FromFile(path))
+            {
+                var dimension = new System.Drawing.Imaging.FrameDimension(gifImg.FrameDimensionsList[0]);
+                int frameCount = gifImg.GetFrameCount(dimension);
+
+                for (int i = 0; i < frameCount; i++)
+                {
+                    gifImg.SelectActiveFrame(dimension, i);
+
+                    using (Bitmap bmp = new Bitmap(gifImg))
+                    {
+                        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+
+                        var data = bmp.LockBits(
+                            rect,
+                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                        int byteCount = data.Stride * data.Height;
+                        byte[] pixels = new byte[byteCount];
+
+                        System.Runtime.InteropServices.Marshal.Copy(
+                            data.Scan0,
+                            pixels,
+                            0,
+                            byteCount);
+
+                        bmp.UnlockBits(data);
+
+                        Texture tex = new Texture((uint)bmp.Width, (uint)bmp.Height);
+                        tex.Update(pixels);
+
+                        sz = tex.Size;
+
+                        animationFrames.Add(tex);
+                    }
+                }
+            }
+
+            texture = animationFrames[0];
+            isAnimated = true;
+            return sz;
         }
 
     }
