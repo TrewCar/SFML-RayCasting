@@ -25,23 +25,29 @@ internal class Player : Camera
         if (Keyboard.IsKeyPressed(Keyboard.Key.D))
             directionMove += this.GetPerpendicularDirection() * speedVelosity * deltaTime;
 
+        if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isJumping)
+        {
+            isJumping = true;
+            jumpVelocity = jumpStrength;
+        }
+
         AdjastiveMove(deltaTime, map, directionMove);
     }
     public override void OnKeyPressed(object sender, KeyEventArgs e)
     {
 
-        if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-        {
-            //if (!isJumping)
-            zIndex += 5f;
-            //groundLevel += 0.05f;
-        }
-        if (e.Code == Keyboard.Key.L)
-        {
-            //if (!isJumping)
-            //    zIndex -= 0.05f;
-            groundLevel -= 2f;
-        }
+        //if (Keyboard.IsKeyPressed(Keyboard.Key.K))
+        //{
+        //    //if (!isJumping)
+        //    zIndex += 5f;
+        //    //groundLevel += 0.05f;
+        //}
+        //if (e.Code == Keyboard.Key.L)
+        //{
+        //    //if (!isJumping)
+        //    //    zIndex -= 0.05f;
+        //    groundLevel -= 2f;
+        //}
     }
     public override void OnMouseMoved(object sender, MouseMoveEventArgs e)
     {

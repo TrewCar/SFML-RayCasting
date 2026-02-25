@@ -84,11 +84,7 @@ public class Camera
         }
 
 
-        if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isJumping)
-        {
-            isJumping = true;
-            jumpVelocity = jumpStrength;
-        }
+        
 
         if (groundLevel < zIndex && !isJumping || zIndex > upLevel)
         {
