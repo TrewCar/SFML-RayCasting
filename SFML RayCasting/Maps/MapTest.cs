@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML_RayCasting.Enemy;
+using SFML_RayCasting.Entity;
 using SFML_RayCasting.Objects;
 using System;
 using System.Collections.Generic;
@@ -45,8 +46,11 @@ namespace SFML_RayCasting.Maps
 			Objects.Add(obj2);
 
 
-            RunRush obj34 = new RunRush("BananaEnemy1", new Vector2f(50, 150), 1);
+            RunRush obj34 = new RunRush("BananaEnemy1", new Vector2f(150, 150), 1);
             Objects.Add(obj34);
+
+            Coin obj35 = new Coin("Coin1", new Vector2f(50, 150));
+            Objects.Add(obj35);
 
 
             //VertexObject obj2 = new VertexObject("Name1", new Vector2f(50, 600), Path.Combine("Textures","wolf.jpg"), 3, false, 0.5f);

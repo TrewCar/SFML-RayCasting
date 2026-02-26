@@ -26,7 +26,7 @@ namespace SFML_RayCasting.Enemy
             if (MathUtils.Distance(pos, this.Position) < 20)
                 return;
 
-            Position += MathUtils.DirectionFromPoitns(Position, pos) * (100 * deltaTime);
+            // Position += MathUtils.DirectionFromPoitns(Position, pos) * (100 * deltaTime);
 
             base.Update(pos, deltaTime, map);
         }

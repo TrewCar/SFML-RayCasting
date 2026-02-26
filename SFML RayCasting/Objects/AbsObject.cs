@@ -84,10 +84,74 @@ namespace SFML_RayCasting.Objects
         public abstract Sprite GetSegment(Collision collision, float widht, float setUp, float setDown, float wallHeight);
 
 
+        public List<Vector2f> Points = new List<Vector2f>();
+        public List<(Vector2f, Vector2f)> Connections { get; set; }
+        public Dictionary<Vector2f, float> textureIndex = new Dictionary<Vector2f, float>();
+        public void AddRelativePoint(Vector2f relativePoint)
+        {
+            Vector2f absolutePoint = Position + relativePoint;
+            Points.Add(absolutePoint);
+        }
+        public void AddConnection(int index1, int index2)
+        {
+            if (index1 >= 0 && index1 < Points.Count &&
+                index2 >= 0 && index2 < Points.Count)
+            {
+                Connections.Add((Points[index1], Points[index2]));
+                CreateIndexTexture(index1, index2);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException("Point indices are out of range.");
+            }
+        }
+
+        protected void CreateIndexTexture(int index1, int index2)
+        {
+            if (texture == null) return;
+
+            var pos1 = Points[index1];
+            var pos2 = Points[index2];
+
+            float distance = MathUtils.Distance(pos1, pos2);
+
+            if (textureIndex.Count == 0)
+            {
+                textureIndex.Add(pos1, 0);
+            }
+
+            float textureWidth = (float)texture.Size.X;
+            float index = distance / distPyWidhtTexture; // Используем N единиц расстояния как одну ширину текстуры
+
+            textureIndex.TryAdd(pos2, textureIndex.Last().Value + index);
+        }
+
+        protected void RebuildTextureIndex()
+        {
+            if (texture == null || Points.Count < 2)
+                return;
+
+            textureIndex.Clear();
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int next = (i + 1) % Points.Count;
+                CreateIndexTexture(i, next);
+            }
+        }
+
         public static VertexObject InstanceCircule(string Name, Vector2f pos, int Points, float radius, SFML.Graphics.Color color, float SizeWall, bool IsGlass = false)
         {
             VertexObject circle = new VertexObject(Name, pos, color, SizeWall, IsGlass);
 
+            circle.InstantCircule(Points, radius);
+
+            return circle;
+        }
+
+        public void InstantCircule(int Points, float radius)
+        {
+            var circle = this;
             // Число точек для аппроксимации круга
             int numPoints = Points;
 
@@ -106,34 +170,13 @@ namespace SFML_RayCasting.Objects
                 int nextIndex = (i + 1) % numPoints;
                 circle.AddConnection(i, nextIndex);
             }
-
-            // Добавляем круг в коллекцию объектов
-            return circle;
         }
         public static VertexObject InstanceCircule(string Name, Vector2f pos, int Points, float radius, string texture, float SizeWall = 1, bool IsGlass = false)
         {
             VertexObject circle = new VertexObject(Name, pos, texture, SizeWall, IsGlass);
 
-            // Число точек для аппроксимации круга
-            int numPoints = Points;
+            circle.InstantCircule(Points, radius);
 
-            // Добавляем точки в форме круга
-            for (int i = 0; i < numPoints; i++)
-            {
-                float angle = (float)i / numPoints * 2 * MathF.PI;
-                float x = radius * MathF.Cos(angle);
-                float y = radius * MathF.Sin(angle);
-                circle.AddRelativePoint(new Vector2f(x, y));
-            }
-
-            // Соединяем точки линиями
-            for (int i = 0; i < numPoints; i++)
-            {
-                int nextIndex = (i + 1) % numPoints;
-                circle.AddConnection(i, nextIndex);
-            }
-
-            // Добавляем круг в коллекцию объектов
             return circle;
         }
 
