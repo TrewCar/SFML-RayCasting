@@ -102,7 +102,7 @@ public class Camera
         else
             upLevel = float.MaxValue;
 
-        if (isJumping)
+        if (/*isJumping*/ true)
         {
 
             zIndex += jumpVelocity * deltaTime;
