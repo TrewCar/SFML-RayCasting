@@ -184,7 +184,7 @@ namespace SFML_RayCasting.Objects
         {
             if (isAnimated && animationFrames.Count > 0)
             {
-                frameTimer += deltaTime;
+                frameTimer += deltaTime* 2;
 
                 if (frameTimer >= frameTime)
                 {
