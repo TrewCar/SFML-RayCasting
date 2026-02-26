@@ -1,12 +1,11 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML_RayCasting.Maps;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Formats.Gif;
+
+
 
 namespace SFML_RayCasting.Objects
 {
@@ -162,43 +161,27 @@ namespace SFML_RayCasting.Objects
         private Vector2u LoadGif(string path)
         {
             animationFrames = new List<Texture>();
-
             Vector2u sz = new();
 
-            using (System.Drawing.Image gifImg = System.Drawing.Image.FromFile(path))
+            using (Image<Rgba32> gif = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
-                var dimension = new System.Drawing.Imaging.FrameDimension(gifImg.FrameDimensionsList[0]);
-                int frameCount = gifImg.GetFrameCount(dimension);
+                int frameCount = gif.Frames.Count;
 
                 for (int i = 0; i < frameCount; i++)
                 {
-                    gifImg.SelectActiveFrame(dimension, i);
-
-                    using (Bitmap bmp = new Bitmap(gifImg))
+                    using (Image<Rgba32> frameImage = gif.Frames.CloneFrame(i))
                     {
-                        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                        int width = frameImage.Width;
+                        int height = frameImage.Height;
 
-                        var data = bmp.LockBits(
-                            rect,
-                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        byte[] pixels = new byte[width * height * 4];
 
-                        int byteCount = data.Stride * data.Height;
-                        byte[] pixels = new byte[byteCount];
+                        frameImage.CopyPixelDataTo(pixels);
 
-                        System.Runtime.InteropServices.Marshal.Copy(
-                            data.Scan0,
-                            pixels,
-                            0,
-                            byteCount);
-
-                        bmp.UnlockBits(data);
-
-                        Texture tex = new Texture((uint)bmp.Width, (uint)bmp.Height);
+                        Texture tex = new Texture((uint)width, (uint)height);
                         tex.Update(pixels);
 
                         sz = tex.Size;
-
                         animationFrames.Add(tex);
                     }
                 }
@@ -206,6 +189,7 @@ namespace SFML_RayCasting.Objects
 
             texture = animationFrames[0];
             isAnimated = true;
+
             return sz;
         }
 
