@@ -8,6 +8,7 @@ namespace SFML_RayCasting
 {
 	public static class RenderWindowView
 	{
+		private const int PERSPECTIVE_DIST_WALL = 50;
 		public static void Render(MapDef map, List<Ray> rays)
 		{
 			float middleHeight = WindowMenedger.Height / 2.0f;
@@ -36,16 +37,17 @@ namespace SFML_RayCasting
 			AbsObject obj = colis.obj;
 			float dist = colis.Dist;
 
+            #region Мат вычисления
 
-			// Коррекция дистанции для устранения эффекта рыбьего глаза
-			float angleDifference = MathUtils.DegreesToRadians(rAngle);
+            // Коррекция дистанции для устранения эффекта рыбьего глаза
+            float angleDifference = MathUtils.DegreesToRadians(rAngle);
 			float correctedDist = dist * (float)Math.Cos(angleDifference);
 
 			float zIndex = (obj.zIndex - zIndexPos); // относительное положение объекта от камеры
 
 			// Перспективное сокращение высоты стены
-			float defWallHeight = WindowMenedger.Height / correctedDist * 50;
-			float wallHeight = WindowMenedger.Height / correctedDist * 50 * 1;
+			float defWallHeight = WindowMenedger.Height / correctedDist * PERSPECTIVE_DIST_WALL;
+			float wallHeight = WindowMenedger.Height / correctedDist * PERSPECTIVE_DIST_WALL * 1;
 
 			float temp = wallHeight;
 			wallHeight *= zIndex;
@@ -86,7 +88,10 @@ namespace SFML_RayCasting
 
 			if (downHeight < upHeight)
 				return;
-			Sprite sp = obj.GetSegment(colis, stepWidth, setUp, setDown, wallHeight);
+
+            #endregion
+
+            Sprite sp = obj.GetSegment(colis, stepWidth, setUp, setDown, wallHeight);
 
 
 			// Затемнение объекта в зависимости длины луча
@@ -129,8 +134,6 @@ namespace SFML_RayCasting
 
 		private static void DrawSky(float dist, int i, float rAngle, float middleHeight, float stepWidth, float zIndexPos)
 		{
-
-
 			// Коррекция дистанции для устранения эффекта рыбьего глаза
 			float angleDifference = MathUtils.DegreesToRadians(rAngle);
 			float correctedDist = dist * (float)Math.Cos(angleDifference);
@@ -138,8 +141,8 @@ namespace SFML_RayCasting
 
 
 			// Перспективное сокращение высоты стены
-			float defWallHeight = WindowMenedger.Height / correctedDist * 50;
-			float wallHeight = WindowMenedger.Height / correctedDist * 50;
+			float defWallHeight = WindowMenedger.Height / correctedDist * PERSPECTIVE_DIST_WALL;
+			float wallHeight = WindowMenedger.Height / correctedDist * PERSPECTIVE_DIST_WALL;
 
 
 			float middle = wallHeight - defWallHeight;
@@ -158,7 +161,5 @@ namespace SFML_RayCasting
 
 			WindowMenedger.DrawVertex(vertices, PrimitiveType.Quads);
 		}
-
-
 	}
 }

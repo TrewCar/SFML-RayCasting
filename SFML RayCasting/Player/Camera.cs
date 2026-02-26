@@ -74,9 +74,9 @@ public class Camera
             Vector2f newPos = camPos + directionMove;
             MenedgerRays collision = new MenedgerRays(map);
 
-            collision.CalcRay();
+            collision.CalrulateRays();
             collision.SaveOnlyCollision();
-            List<Ray> rays = collision.rays;
+            List<Ray> rays = collision.Rays;
 
             Vector2f adjustedMove = MathUtils.AdjustMovementForCollision(newPos, zIndex, rays, directionMove);
 

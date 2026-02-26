@@ -70,11 +70,11 @@ namespace SFML_RayCasting.Maps
 			obj4.AddConnection(3, 0);
 			Objects.Add(obj4);
 
-			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(400, 300), 20, 50f, "Textures\\wolf.jpg", 2, false));
-			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(100, 300), 20, 50f, "Textures\\wolf.jpg", 2, false));
+			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(400, 300), 20, 50f, Path.Combine("Textures", "wolf.jpg"), 2, false));
+			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(100, 300), 20, 50f, Path.Combine("Textures", "wolf.jpg"), 2, false));
 
-			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(400, 600), 20, 50f, "Textures\\wolf.jpg", 2, false));
-			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(100, 600), 20, 50f, "Textures\\wolf.jpg", 2, false));
+			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(400, 600), 20, 50f, Path.Combine("Textures", "wolf.jpg"), 2, false));
+			Objects.Add(AbsObject.InstanceCircule("Name5", new Vector2f(100, 600), 20, 50f, Path.Combine("Textures", "wolf.jpg"), 2, false));
 
 		}
 	}

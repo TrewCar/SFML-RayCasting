@@ -15,8 +15,8 @@ namespace SFML_RayCasting.Menedgers
         {
             this.map = map;
 
-            this.width = map.width;
-            this.step = map.step; 
+            this.Width = map.width;
+            this.Step = map.step; 
             this.POV = map.Pov;
 
             this.maxRecurse = maxRecurse;
@@ -25,32 +25,32 @@ namespace SFML_RayCasting.Menedgers
         public MenedgerRays(MapDef map)
         {
             this.map = map;
-            this.Colisson = true;
-            this.width = map.width;
-            this.step = 2;
+            this.ifCollision = true;
+            this.Width = map.width;
+            this.Step = 2;
             this.POV = 360.0f;
             this.maxRecurse = 0;
             this.isNeedRecurce = false;
         }
 
-        public int width;
-        public int height;
-        public float step;
-        public float rayLength;
+        public int Width;
+        public int Height;
+        public float Step;
+        public float RayLength;
         public float POV;
 
-        private bool Colisson;
+        private bool ifCollision;
 
         private MapDef map;
         private int maxRecurse;
         private bool isNeedRecurce;
 
-        public List<Ray> rays { get; private set; } = new List<Ray>();
+        public List<Ray> Rays { get; private set; } = new List<Ray>();
 
-		public void CalcRay()
+		public void CalrulateRays()
 		{
 			List<Ray> rays = new List<Ray>();
-			int numSteps = (int)(this.width / this.step);
+			int numSteps = (int)(this.Width / this.Step);
 			var objs = map.Objects;
 
 			for (int n = 0; n <= numSteps; n++)
@@ -112,7 +112,7 @@ namespace SFML_RayCasting.Menedgers
 				rays.Add(rayRoot);
 			}
 
-			this.rays = rays;
+			this.Rays = rays;
 		}
 
 
@@ -121,21 +121,21 @@ namespace SFML_RayCasting.Menedgers
         {
             List<Ray> rays = new List<Ray>();
 
-            foreach(Ray ray in this.rays) { 
+            foreach(Ray ray in this.Rays) { 
                 if(ray.Colisions.Count > 0)
                 {
                     rays.Add(ray);
                 }
             }
-            this.rays = rays;
+            this.Rays = rays;
         }
 
         public void DrawRays(PrimitiveType type)
         {
-            foreach (var ray in rays)
+            foreach (var ray in Rays)
             {
                 List<Vertex> line = new List<Vertex>();
-                if (Colisson)
+                if (ifCollision)
                     line.Add(new Vertex(map.camera.Position, Color.Blue));
                 else
                     line.Add(new Vertex(map.camera.Position, new Color(255, 255, 255)));
@@ -149,7 +149,7 @@ namespace SFML_RayCasting.Menedgers
                     if (!currentRay.IsColision)
                     {
 
-                        if (Colisson)
+                        if (ifCollision)
                             line.Add(new Vertex(currentRay.EndPoint, Color.Blue));
                         else
                             
@@ -166,7 +166,7 @@ namespace SFML_RayCasting.Menedgers
                         255
                     );
 
-                    if(Colisson)
+                    if(ifCollision)
                         line.Add(new Vertex(colis.Pos, Color.Blue));
                     else
                         line.Add(new Vertex(colis.Pos, fadedColor));
