@@ -20,9 +20,7 @@ namespace SFML_RayCasting.Objects
         {
             Connections = new List<(Vector2f, Vector2f)>();
         }
-        public List<Vector2f> Points = new List<Vector2f>();
-        public List<(Vector2f, Vector2f)> Connections { get; set; }
-        public Dictionary<Vector2f, float> textureIndex = new Dictionary<Vector2f, float>();
+
 
         public override List<Collision> CheckColision(Ray ray, float zIndex)
         {
@@ -61,7 +59,7 @@ namespace SFML_RayCasting.Objects
                     ray.IsColision = true;
                 }
             }
-                return collisions;
+            return collisions;
         }
         public override void Draw()
         {
@@ -75,44 +73,7 @@ namespace SFML_RayCasting.Objects
                 WindowMenedger.DrawVertex(line, PrimitiveType.Lines);
             }
         }
-        public void AddRelativePoint(Vector2f relativePoint)
-        {
-            Vector2f absolutePoint = Position + relativePoint;
-            Points.Add(absolutePoint);
-        }
-        public void AddConnection(int index1, int index2)
-        {
-            if (index1 >= 0 && index1 < Points.Count &&
-                index2 >= 0 && index2 < Points.Count)
-            {
-                Connections.Add((Points[index1], Points[index2]));
-                CreateIndexTexture(index1, index2);
-            }
-            else
-            {
-                throw new IndexOutOfRangeException("Point indices are out of range.");
-            }
-        }
 
-        protected void CreateIndexTexture(int index1, int index2)
-        {
-            if (texture == null) return;
-
-            var pos1 = Points[index1];
-            var pos2 = Points[index2];
-
-            float distance = MathUtils.Distance(pos1, pos2);
-
-            if (textureIndex.Count == 0)
-            {
-                textureIndex.Add(pos1, 0);
-            }
-
-            float textureWidth = (float)texture.Size.X;
-            float index = distance / distPyWidhtTexture; // Используем N единиц расстояния как одну ширину текстуры
-
-            textureIndex.TryAdd(pos2, textureIndex.Last().Value + index);
-        }
 
 
         public override Sprite GetSegment(Collision collision, float segmentWidth, float setUp, float setDown, float wallHeight)

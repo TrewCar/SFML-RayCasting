@@ -42,8 +42,8 @@ namespace SFML_RayCasting.Objects
             Connections[0] = (A, B);
             Points[0] = A;
             Points[1] = B;
-            textureIndex = new();
-            CreateIndexTexture(0, 1);
+
+            RebuildTextureIndex();
             base.Update(pos, deltaTime, map);
         }
     }

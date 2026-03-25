@@ -21,14 +21,14 @@ public class RenderView
     private PreviewCalcRay OnPreviewCalcRay;
 
     private delegate void TickFrame(List<Ray> view, float deltaTime);
-    private TickFrame Tick;
+    private TickFrame onTickFrame;
 
     public RenderView(MapDef map)
     {
         this.map = map;
 
         OnPreviewCalcRay += map.OnPreviewCalcRay;
-        Tick += map.Tick;
+        onTickFrame += map.Tick;
 
         WindowMenedger.InstanceWindow(map.width, map.height, "2D Ray Rendering");
         WindowMenedger.window.SetVerticalSyncEnabled(true);
@@ -53,10 +53,10 @@ public class RenderView
                 obj.Update(map.camera.Position, fpsCounter.deltaTime, map);
             }
 
-            this.raysView.CalcRay();
+            this.raysView.CalrulateRays();
 
 
-            Tick.Invoke(raysView.rays, fpsCounter.deltaTime);
+            onTickFrame.Invoke(raysView.Rays, fpsCounter.deltaTime);
 
             DrawMap();
 
@@ -69,7 +69,7 @@ public class RenderView
 
     private void DrawMap()
     {
-        RenderWindowView.Render(map, raysView.rays);
+        RenderWindowView.Render(map, raysView.Rays);
         map.Draw();
         raysView.DrawRays(primitiveMap);
     }

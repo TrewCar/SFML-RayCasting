@@ -12,7 +12,7 @@ namespace SFML_RayCasting.Enemy
 {
     internal class Banana : EnemyObject
     {
-        public Banana(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, "Textures\\cat_clear.png", 1, false, zIndex)
+        public Banana(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, Path.Combine("Textures", "cat_clear.png"), 1, false, zIndex)
         {
             this.AddRelativePoint(new Vector2f(0, 0));
             this.AddRelativePoint(new Vector2f(50, 0));

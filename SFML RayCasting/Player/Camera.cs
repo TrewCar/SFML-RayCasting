@@ -74,9 +74,9 @@ public class Camera
             Vector2f newPos = camPos + directionMove;
             MenedgerRays collision = new MenedgerRays(map);
 
-            collision.CalcRay();
+            collision.CalrulateRays();
             collision.SaveOnlyCollision();
-            List<Ray> rays = collision.rays;
+            List<Ray> rays = collision.Rays;
 
             Vector2f adjustedMove = MathUtils.AdjustMovementForCollision(newPos, zIndex, rays, directionMove);
 
@@ -84,11 +84,7 @@ public class Camera
         }
 
 
-        if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isJumping)
-        {
-            isJumping = true;
-            jumpVelocity = jumpStrength;
-        }
+        
 
         if (groundLevel < zIndex && !isJumping || zIndex > upLevel)
         {
@@ -106,7 +102,7 @@ public class Camera
         else
             upLevel = float.MaxValue;
 
-        if (isJumping)
+        if (/*isJumping*/ true)
         {
 
             zIndex += jumpVelocity * deltaTime;

@@ -3,6 +3,7 @@ using SFML.System;
 using SFML.Window;
 using SFML_RayCasting.Menedgers;
 using SFML_RayCasting.Objects;
+using SFML_RayCasting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,7 @@ namespace SFML_RayCasting.Maps
         public virtual void Tick(List<Ray> view, float deltaTime)
         {
             camera.Tick(deltaTime, this);
+
             return;
         }
     }

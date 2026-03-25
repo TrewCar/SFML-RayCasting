@@ -1,12 +1,11 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML_RayCasting.Maps;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Formats.Gif;
+
+
 
 namespace SFML_RayCasting.Objects
 {
@@ -85,10 +84,74 @@ namespace SFML_RayCasting.Objects
         public abstract Sprite GetSegment(Collision collision, float widht, float setUp, float setDown, float wallHeight);
 
 
+        public List<Vector2f> Points = new List<Vector2f>();
+        public List<(Vector2f, Vector2f)> Connections { get; set; }
+        public Dictionary<Vector2f, float> textureIndex = new Dictionary<Vector2f, float>();
+        public void AddRelativePoint(Vector2f relativePoint)
+        {
+            Vector2f absolutePoint = Position + relativePoint;
+            Points.Add(absolutePoint);
+        }
+        public void AddConnection(int index1, int index2)
+        {
+            if (index1 >= 0 && index1 < Points.Count &&
+                index2 >= 0 && index2 < Points.Count)
+            {
+                Connections.Add((Points[index1], Points[index2]));
+                CreateIndexTexture(index1, index2);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException("Point indices are out of range.");
+            }
+        }
+
+        protected void CreateIndexTexture(int index1, int index2)
+        {
+            if (texture == null) return;
+
+            var pos1 = Points[index1];
+            var pos2 = Points[index2];
+
+            float distance = MathUtils.Distance(pos1, pos2);
+
+            if (textureIndex.Count == 0)
+            {
+                textureIndex.Add(pos1, 0);
+            }
+
+            float textureWidth = (float)texture.Size.X;
+            float index = distance / distPyWidhtTexture; // Используем N единиц расстояния как одну ширину текстуры
+
+            textureIndex.TryAdd(pos2, textureIndex.Last().Value + index);
+        }
+
+        protected void RebuildTextureIndex()
+        {
+            if (texture == null || Points.Count < 2)
+                return;
+
+            textureIndex.Clear();
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                int next = (i + 1) % Points.Count;
+                CreateIndexTexture(i, next);
+            }
+        }
+
         public static VertexObject InstanceCircule(string Name, Vector2f pos, int Points, float radius, SFML.Graphics.Color color, float SizeWall, bool IsGlass = false)
         {
             VertexObject circle = new VertexObject(Name, pos, color, SizeWall, IsGlass);
 
+            circle.InstantCircule(Points, radius);
+
+            return circle;
+        }
+
+        public void InstantCircule(int Points, float radius)
+        {
+            var circle = this;
             // Число точек для аппроксимации круга
             int numPoints = Points;
 
@@ -107,34 +170,13 @@ namespace SFML_RayCasting.Objects
                 int nextIndex = (i + 1) % numPoints;
                 circle.AddConnection(i, nextIndex);
             }
-
-            // Добавляем круг в коллекцию объектов
-            return circle;
         }
         public static VertexObject InstanceCircule(string Name, Vector2f pos, int Points, float radius, string texture, float SizeWall = 1, bool IsGlass = false)
         {
             VertexObject circle = new VertexObject(Name, pos, texture, SizeWall, IsGlass);
 
-            // Число точек для аппроксимации круга
-            int numPoints = Points;
+            circle.InstantCircule(Points, radius);
 
-            // Добавляем точки в форме круга
-            for (int i = 0; i < numPoints; i++)
-            {
-                float angle = (float)i / numPoints * 2 * MathF.PI;
-                float x = radius * MathF.Cos(angle);
-                float y = radius * MathF.Sin(angle);
-                circle.AddRelativePoint(new Vector2f(x, y));
-            }
-
-            // Соединяем точки линиями
-            for (int i = 0; i < numPoints; i++)
-            {
-                int nextIndex = (i + 1) % numPoints;
-                circle.AddConnection(i, nextIndex);
-            }
-
-            // Добавляем круг в коллекцию объектов
             return circle;
         }
 
@@ -142,7 +184,7 @@ namespace SFML_RayCasting.Objects
         {
             if (isAnimated && animationFrames.Count > 0)
             {
-                frameTimer += deltaTime;
+                frameTimer += deltaTime* 2;
 
                 if (frameTimer >= frameTime)
                 {
@@ -162,43 +204,27 @@ namespace SFML_RayCasting.Objects
         private Vector2u LoadGif(string path)
         {
             animationFrames = new List<Texture>();
-
             Vector2u sz = new();
 
-            using (System.Drawing.Image gifImg = System.Drawing.Image.FromFile(path))
+            using (Image<Rgba32> gif = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
-                var dimension = new System.Drawing.Imaging.FrameDimension(gifImg.FrameDimensionsList[0]);
-                int frameCount = gifImg.GetFrameCount(dimension);
+                int frameCount = gif.Frames.Count;
 
                 for (int i = 0; i < frameCount; i++)
                 {
-                    gifImg.SelectActiveFrame(dimension, i);
-
-                    using (Bitmap bmp = new Bitmap(gifImg))
+                    using (Image<Rgba32> frameImage = gif.Frames.CloneFrame(i))
                     {
-                        var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                        int width = frameImage.Width;
+                        int height = frameImage.Height;
 
-                        var data = bmp.LockBits(
-                            rect,
-                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        byte[] pixels = new byte[width * height * 4];
 
-                        int byteCount = data.Stride * data.Height;
-                        byte[] pixels = new byte[byteCount];
+                        frameImage.CopyPixelDataTo(pixels);
 
-                        System.Runtime.InteropServices.Marshal.Copy(
-                            data.Scan0,
-                            pixels,
-                            0,
-                            byteCount);
-
-                        bmp.UnlockBits(data);
-
-                        Texture tex = new Texture((uint)bmp.Width, (uint)bmp.Height);
+                        Texture tex = new Texture((uint)width, (uint)height);
                         tex.Update(pixels);
 
                         sz = tex.Size;
-
                         animationFrames.Add(tex);
                     }
                 }
@@ -206,6 +232,7 @@ namespace SFML_RayCasting.Objects
 
             texture = animationFrames[0];
             isAnimated = true;
+
             return sz;
         }
 

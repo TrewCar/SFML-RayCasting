@@ -12,7 +12,7 @@ namespace SFML_RayCasting.Enemy
 {
     internal class RunRush : EnemyObject
     {
-        public RunRush(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, "Textures\\run-rush.gif", 1, false, zIndex)
+        public RunRush(string Name, Vector2f pos, float zIndex = 1) : base(Name, pos, Path.Combine("Textures", "Erl.gif"), 1, false, zIndex)
         {
             this.AddRelativePoint(new Vector2f(0, 0));
             this.AddRelativePoint(new Vector2f(75, 0));
@@ -26,7 +26,7 @@ namespace SFML_RayCasting.Enemy
             if (MathUtils.Distance(pos, this.Position) < 20)
                 return;
 
-            Position += MathUtils.DirectionFromPoitns(Position, pos) * (100 * deltaTime);
+            // Position += MathUtils.DirectionFromPoitns(Position, pos) * (100 * deltaTime);
 
             base.Update(pos, deltaTime, map);
         }
